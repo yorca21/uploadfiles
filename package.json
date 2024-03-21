@@ -1,0 +1,7 @@
+{
+  "name": "uploadfiles",
+  "version": "1.0.0",
+  "description": "servidor para subir archivos ",
+  "main": "index.js",
+  "license": "MIT"
+}
