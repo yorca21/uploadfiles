@@ -3,5 +3,11 @@
   "version": "1.0.0",
   "description": "servidor para subir archivos ",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.19.1",
+    "express-fileupload": "^1.5.0",
+    "path": "^0.12.7"
+  }
 }
