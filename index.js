@@ -9,8 +9,7 @@
  app.use(bodyParser.json())
  app.use(bodyParser.urlencoded({extended: true}))
 
- //app.use(fileUpload());
-  
+ 
  app.use(fileUpload({
    useTempFiles: true,
     tempFileDir: '/tmp/'
@@ -28,15 +27,13 @@
   filesArray.forEach(file => {
     
     if(file&&file.name){
-
      // const extension = file.name.split('.')[file.name.split('.').length - 1];
      const extension = path.extname(file.name);
      const ruta = path.join( __dirname, 'archivos', uuidv4() + '.' + extension)
-    
+     
     file.mv(ruta ,(error)  => {
        if(error)
-      
-       return res.status(500).json({
+        return res.status(500).json({
         status : 500 ,
         mensaje : ' Error en el almacenaje del archivo',
         error
