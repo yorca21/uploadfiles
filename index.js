@@ -9,7 +9,12 @@
  app.use(bodyParser.json())
  app.use(bodyParser.urlencoded({extended: true}))
 
- app.use(fileUpload());
+ //app.use(fileUpload());
+  
+ app.use(fileUpload({
+   useTempFiles: true,
+    tempFileDir: '/tmp/'
+  }));
  
  app.post('/', (req, res) => {
   
@@ -17,15 +22,16 @@
     return res.status(400).send('No se han enviado archivos.');
   }
 
-  const files = req.files.archivo;
-  const filesArray = Array.isArray(files) ? files : [files];
+  const file = req.files.archivo;
+  const filesArray = Array.isArray(file) ? file : [file];
 
   filesArray.forEach(file => {
     
     if(file&&file.name){
 
-      const extension = file.name.split('.')[file.name.split('.').length - 1];
-      const ruta = path.join( __dirname, 'archivos', uuidv4() + '.' + extension)
+     // const extension = file.name.split('.')[file.name.split('.').length - 1];
+     const extension = path.extname(file.name);
+     const ruta = path.join( __dirname, 'archivos', uuidv4() + '.' + extension)
     
     file.mv(ruta ,(error)  => {
        if(error)
@@ -36,10 +42,8 @@
         error
       })
     });
-
     }
-    
-  });
+ });
   return res.status(201).json({
     status : 201,
     mensaje : ' Archivo almacenado correctamente'
