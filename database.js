@@ -1,8 +1,8 @@
 const pool = new Pool({
-    user: 'tu_usuario',
+    user: 'Data',
     host: 'localhost',
-    database: 'tu_base_de_datos',
-    password: 'tu_contraseña',
+    database: 'fileuploads',
+    password: '1234',
     port: 5432, // puerto por defecto de PostgreSQL
   });
   

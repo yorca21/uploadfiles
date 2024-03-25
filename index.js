@@ -14,6 +14,11 @@ app.use(fileUpload({
   tempFileDir: '/tmp/'
 }));
 
+setInterval(() => {
+  fileUpload.cleanUp('/tmp/');
+}, 86400000); // 86400000 milisegundos = 24 horas
+
+
 app.post('/', (req, res) => {
 
   if (!req.files || Object.keys(req.files).length === 0) {
