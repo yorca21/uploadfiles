@@ -4,6 +4,7 @@ const fileUpload = require('express-fileupload')  //importa el middleware  para 
 const app = express()                              // Crear una nueva instancia de la aplicación Express
 const path = require('path')                       //Importar el módulo 'path' para trabajar con rutas de archivos y directorios
 const { v4: uuidv4 } = require('uuid')             // nos ayuda a generar identificadores unicos  para cada archivo  
+const getFilename = require('./Tools/Filename');
 
 //analizar las solicitudes entrantes en formato JSON y lo convierte en un objeto JavaScript
 app.use(express.json())
@@ -25,14 +26,18 @@ app.post('/', (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No se han enviado archivos.');
   }
-
+  //estás accediendo a los archivos adjuntos enviados en la solicitud y los asignas a la variable files
   const files = req.files;
   
+  // aqui se está utilizando el método Object.keys() de JavaScript para obtener un array de todas las claves presentes en el objeto files.
   const archivos = Object.keys(files) 
-
+  //es un bucle forEach que itera sobre cada elemento del array "archivos"
   archivos.forEach(file => {
     
-    const extension = files[file].name.split('.')[files[file].name.split('.').length - 1];
+    const extension = getFilename(files[file].name);
+       //esta línea de código extrae la extensión del nombre del archivo
+    //const extension = files[file].name.split('.')[files[file].name.split('.').length - 1];
+    //esta línea de código crea una ruta completa donde se almacenará el archivo
     const ruta = path.join(__dirname, 'archivos', uuidv4() + '.' + extension)
 
     files[file].mv(ruta, (error) => {
