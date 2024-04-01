@@ -10,5 +10,4 @@ const move_File = (ruta, files, file) => {
       });
     });
   };
-  
-  module.exports = move_File;
+   module.exports = move_File;

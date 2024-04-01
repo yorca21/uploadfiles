@@ -6,6 +6,9 @@ const app = express()                              // Crear una nueva instancia 
 const getFilename = require('./Tools/Filename');
 const generateFileruta = require('./Tools/rutas');
 const move_File = require('./Tools/moveFile');
+const { crearTablaArchivos, insertarArchivo } = require('./Tools/database');
+
+
 
 //analizar las solicitudes entrantes en formato JSON y lo convierte en un objeto JavaScript
 app.use(express.json())
@@ -20,6 +23,12 @@ app.use(fileUpload({
 setInterval(() => {
   fileUpload.cleanUp('/tmp/');    // cleanup limpia los archivos temporales del directorio especificado. 
 }, 86400000); // 86400000 milisegundos = 24 horas tiempo de permanencia 
+
+// Llamar a la función para crear la tabla 
+crearTablaArchivos().catch(error => 
+
+  console.error('Error al crear la tabla de archivos:', error)
+);
 
 app.post('/', async (req, res) => {
   try {
@@ -40,6 +49,16 @@ app.post('/', async (req, res) => {
       
       // Agregar la promesa al array
       promises.push(move_File(ruta, files, file, res));
+      
+      // Insertar información del archivo en la base de datos
+       const nombre = files[file].name;
+       const peso = files[file].size; // Tamaño en bytes
+       
+       insertarArchivo(nombre, extension, peso)
+       .catch(error =>
+         // Manejar cualquier error que pueda ocurrir
+         console.error('Error al insertar archivo en la base de datos:', error));
+     
     });
 
     // Esperar a que todas las promesas se resuelvan
