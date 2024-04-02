@@ -2,6 +2,7 @@ const bodyParser = require('body-parser')  //importamos el modulo  para analizar
 const express = require('express')        // importamos el modulo express nos proporciona una API para desarrollo 
 const fileUpload = require('express-fileupload')  //importa el middleware  para una carga de archivos 
 const app = express()                              // Crear una nueva instancia de la aplicación Express
+const path = require('path');
 
 const getFilename = require('./Tools/Filename');
 const generateFileruta = require('./Tools/rutas');
@@ -44,6 +45,7 @@ app.post('/', async (req, res) => {
 
     // Iterar sobre cada archivo y agregar una promesa al array
     archivos.forEach((file) => {
+      
       const extension = getFilename(files[file].name);
       const ruta = generateFileruta(extension);
       
@@ -53,8 +55,9 @@ app.post('/', async (req, res) => {
       // Insertar información del archivo en la base de datos
        const nombre = files[file].name;
        const peso = files[file].size; // Tamaño en bytes
+       const nombreCarpeta = path.basename(path.dirname(ruta)); // Obtener el nombre de la carpeta
        
-       insertarArchivo(nombre, extension, peso)
+       insertarArchivo(nombre, extension, peso, nombreCarpeta)
        .catch(error =>
          // Manejar cualquier error que pueda ocurrir
          console.error('Error al insertar archivo en la base de datos:', error));
